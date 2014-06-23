@@ -5,7 +5,7 @@ interface ValidationInterface
 {
     public function setRules(array $rules);
 
-    public function setData(array $data);
+    public function setFieldset(Fieldset $fieldset);
 
     public function validate();
     
