@@ -35,6 +35,12 @@ class Form
 	 */
 	protected $attributes = [];
 
+	/**
+	 * Template to render
+	 * @var Template
+	 */
+	protected $template;
+
 	public function addFieldset(Fieldset $fieldset)
 	{
 		$this->fieldsets[$fieldset->getName()] = $fieldset;
@@ -117,5 +123,19 @@ class Form
 	public function setAttribute($key, $value)
 	{
 		return $this->attributes[$key] = $value;
+	}
+
+	public function setTemplate(TemplateInterface $template)
+	{
+		$this->template = $template;
+		return $this;
+	}
+
+	public function render()
+	{
+		$template = $this->template;
+		$template->setForm($this);
+		
+		return $template->render();
 	}
 }

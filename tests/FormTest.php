@@ -64,6 +64,19 @@ class FormTest extends PHPUnit_Framework_Testcase
         $this->assertEquals('Sahan', $fs->getElement('first_name')->getValue());
     }
 
+    public function testRender()
+    {
+        $template = m::mock('SH\Formy\TemplateInterface')
+                    ->shouldReceive('setForm')
+                    ->times(1)
+                    ->shouldReceive('render')
+                    ->times(1)
+                    ->getMock();
+
+        $form     = new Form;
+        $form->setTemplate($template);
+        $form->render();
+    }
 
     public function tearDown()
     {
