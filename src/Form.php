@@ -92,6 +92,11 @@ class Form
 		}
 	}
 
+	public function getData()
+	{
+		return $this->data;
+	}
+
 	public function setData($input_data)
 	{
 		$this->data = $input_data;
