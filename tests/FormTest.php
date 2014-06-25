@@ -82,7 +82,6 @@ class FormTest extends PHPUnit_Framework_Testcase
     {
         $val    = m::mock('SH\Formy\ValidationInterface')
                    ->shouldReceive('setForm')->times(1)
-                   ->shouldReceive('setData')->times(1)
                    ->shouldReceive('validate')->times(1)
                    
                    ->shouldReceive('getFieldsetErrors')->times(1)

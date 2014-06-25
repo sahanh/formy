@@ -68,13 +68,10 @@ class Form
 
 	public function validate()
 	{
-		$data      = new InputResolver($this->data);
 		$validator = $this->validator;
 
 		if (!$validator)
 			throw new InvalidValidatorException("No validator set");
-
-		$validator->setData($data->resolve());
 
 		if ($validator->validate())
 			return true;
