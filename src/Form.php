@@ -68,27 +68,10 @@ class Form
 
 	public function validate()
 	{
-		$validator = $this->validator;
-
-		if (!$validator)
+		if (!$this->validator)
 			throw new InvalidValidatorException("No validator set");
 
-		if ($validator->validate())
-			return true;
-
-
-		foreach ($this->fieldsets as $fieldset_name => $fieldset) {
-			
-			$messages = $validator->getFieldsetErrors($fieldset_name);
-
-			//foreach element in the fieldset
-			foreach ($fieldset->getElements() as $element_name => $element) {
-				//set error messages
-				if ($element_errors = array_get($messages, $element_name))
-					$element->setMeta('errors', $element_errors);
-			}
-
-		}
+		return $this->validator->validate();
 	}
 
 	public function getData()
