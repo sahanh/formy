@@ -3,13 +3,22 @@ namespace SH\Formy;
 
 interface ValidationInterface
 {
-    public function setRules(array $rules);
-
-    public function setFieldset(Fieldset $fieldset);
-
+    /**
+     * Validate the data
+     * @return bool
+     */
     public function validate();
     
+    /**
+     * Get all the errors
+     * @return array
+     */
     public function getErrors();
 
-    public function getElementErrors($name);
+    /**
+     * Get errors for a specific fieldset
+     * @param  string $fieldset_name
+     * @return array
+     */
+    public function getFieldsetErrors($fieldset_name);
 }

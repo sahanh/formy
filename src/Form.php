@@ -2,6 +2,7 @@
 namespace SH\Formy;
 
 use SH\Formy\Form\InputResolver;
+use SH\Formy\Exception\InvalidValidatorException;
 
 class Form
 {
@@ -9,13 +10,13 @@ class Form
 	 * Fieldsets
 	 * @var array
 	 */
-	protected $fieldsets = [];
+	protected $fieldsets = array();
 
 	/**
-	 * Fieldset Validators
-	 * @var array
+	 * Validator
+	 * @var ValidationInterface
 	 */
-	protected $validators;
+	protected $validator;
 
 	/**
 	 * Input filter
@@ -27,13 +28,13 @@ class Form
 	 * Populated data
 	 * @var array
 	 */
-	protected $data;
+	protected $data = array();
 
 	/**
 	 * Form attributes
 	 * @var array
 	 */
-	protected $attributes = [];
+	protected $attributes = array();
 
 	/**
 	 * Template to render
@@ -57,46 +58,38 @@ class Form
 
 	}
 
-	public function setValidator($fieldset, ValidationInterface $validator)
+	public function setValidator(ValidationInterface $validator)
 	{
-		$this->validators[$fieldset] = $validator;
+		$this->validator = $validator;
 		return $this;
-	}
-
-	public function getValidators()
-	{
-		return $this->validators;
 	}
 
 	public function validate()
 	{
-		$valid = true;
+		$data      = new InputResolver($this->data);
+		$validator = $this->validator;
 
-		//iterate through each validator
-		foreach ($this->validators as $name => $validator) {
+		if (!$validator)
+			throw new InvalidValidatorException("No validator set");
 
-			$data = array_get($this->data, $name, array());
-			$data = new InputResolver($data);
+		$validator->setData($data->resolve());
 
-			//set data associated with the fieldset
-			$validator->setData($data->resolve());
+		if ($validator->validate())
+			return true;
 
-			if (!$validator->validate())
-				$valid = false;
 
-			if ($fieldset = array_get($this->fieldsets, $name)) {
+		foreach ($this->fieldsets as $fieldset_name => $fieldset) {
+			
+			$messages = $validator->getFieldsetErrors($fieldset_name);
 
-				//foreach element in the fieldset
-				foreach ($fieldset->getElements() as $element_name => $element) {
-					//set error messages
-					if ($messages = $validator->getElementErrors($element_name))
-						$element->setMeta('errors', $messages);
-				}
-
+			//foreach element in the fieldset
+			foreach ($fieldset->getElements() as $element_name => $element) {
+				//set error messages
+				if ($element_errors = array_get($messages, $element_name))
+					$element->setMeta('errors', $element_errors);
 			}
-		}
 
-		return $valid;
+		}
 	}
 
 	public function setData($input_data)

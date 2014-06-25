@@ -78,6 +78,52 @@ class FormTest extends PHPUnit_Framework_Testcase
         $form->render();
     }
 
+    public function testValidation()
+    {
+        $val    = m::mock('SH\Formy\ValidationInterface')
+                   ->shouldReceive('setData')->times(1)
+                   ->shouldReceive('validate')->times(1)
+                   
+                   ->shouldReceive('getFieldsetErrors')->times(1)
+                   ->with('customers')
+                   ->andReturn(array('first_name' => array('First name is required')))
+                   
+                   ->getMock();
+
+        $element = m::mock('SH\Formy\Element')
+                            
+                    ->shouldReceive('setMeta')
+                    ->with('errors', array('First name is required'))
+                    
+                    ->getMock();
+
+        $fieldset = m::mock('SH\Formy\Fieldset')
+                    ->shouldReceive('getName')->times(1)
+                    ->andReturn('customers')
+                    
+                    ->shouldReceive('getElements')->times(1)
+                    ->andReturn(array('first_name' => $element))
+                    
+                    ->getMock();
+
+
+        $form = new Form;
+        $form->addFieldset($fieldset);
+        $form->setValidator($val);
+        $form->validate();
+
+    }
+
+    /**
+     * @expectedException SH\Formy\Exception\InvalidValidatorException
+     * @expectedExceptionMessage No validator set
+     */
+    public function testInvalidValidator()
+    {
+        $form = new Form;
+        $form->validate();
+    }
+
     public function tearDown()
     {
         m::close();
