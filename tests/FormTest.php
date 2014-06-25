@@ -81,6 +81,7 @@ class FormTest extends PHPUnit_Framework_Testcase
     public function testValidation()
     {
         $val    = m::mock('SH\Formy\ValidationInterface')
+                   ->shouldReceive('setForm')->times(1)
                    ->shouldReceive('setData')->times(1)
                    ->shouldReceive('validate')->times(1)
                    

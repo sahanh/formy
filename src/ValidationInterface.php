@@ -3,6 +3,8 @@ namespace SH\Formy;
 
 interface ValidationInterface
 {
+    public function setForm(Form $form);
+
     /**
      * Validate the data
      * @return bool
