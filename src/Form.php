@@ -58,6 +58,11 @@ class Form
 
 	}
 
+	public function getValidator()
+	{
+		return $this->validator;
+	}
+
 	public function setValidator(ValidationInterface $validator)
 	{
 		$validator->setForm($this);
