@@ -100,6 +100,11 @@ class Form
 		return $this;
 	}
 
+	public function getAttributes()
+	{
+		return $this->attributes;
+	}
+
 	public function getAttribute($key)
 	{
 		return array_get($this->attributes, $key, false);
