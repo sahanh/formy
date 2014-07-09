@@ -2,8 +2,11 @@
 namespace SH\Formy\Input;
 
 use SH\Formy\Exception\InvalidValueException;
+use IteratorAggregate;
+use ArrayIterator;
+use Countable;
 
-class ArrayElement extends Element
+class ArrayElement extends Element implements IteratorAggregate, Countable
 {
     protected $elements = [];
 
@@ -25,9 +28,6 @@ class ArrayElement extends Element
      */
     public function getElements()
     {
-        if (empty($this->elements))
-            $this->makeElement($value);
-
         return $this->elements;
     }
 
@@ -38,9 +38,25 @@ class ArrayElement extends Element
      */
     public function makeElement($value)
     {
-        $element = new Element($this->name, $this->type, $this->attributes);
-        $element->setMeta($this->meta);
+        $element = new Element("{$this->name}[]", $this->type, $this->attributes);
+        $element->setValue($value);
+
+        if ($this->meta)
+            $element->setMetas($this->meta);
+        
+        if ($this->fieldset)
+            $element->setFieldset($this->fieldset);
 
         return $element;
+    }
+
+    public function getIterator()
+    {
+        return new ArrayIterator($this->getElements());
+    }
+
+    public function count()
+    {
+        return count($this->getElements());
     }
 }
