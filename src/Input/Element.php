@@ -11,7 +11,7 @@ class Element
 
 	protected $attributes = [];
 
-	protected $meta;
+	protected $meta       = [];
 
 	protected $fieldset;
 
