@@ -101,6 +101,46 @@ class FormTest extends PHPUnit_Framework_Testcase
         $form->validate();
     }
 
+    /**
+     * @expectedException OutOfBoundsException
+     * @expectedExceptionMessage Fieldset foo does not exis
+     */
+    public function testInvalidFieldset()
+    {
+        $form = new Form;
+        $form->getFieldset('foo');
+    }
+
+    /**
+     * @expectedException OutOfBoundsException
+     */
+    public function testInvalidGetElement()
+    {
+        $fs = new Fieldset;
+        $fs->setName('customers');
+
+        $form = new Form;
+        $form->addFieldset($fs);
+
+        $form->getElement('customers.foo');
+    }
+
+    public function testTemplateRender()
+    {
+        $t = m::mock('SH\\Formy\\TemplateInterface');
+        $t->shouldReceive('setForm')->times(1);
+        $t->shouldReceive('render')->times(1);
+
+        $fs = new Fieldset;
+        $fs->setName('customers');
+
+        $form = new Form;
+        $form->addFieldset($fs);
+        $form->setTemplate($t);
+
+        $form->render();
+    }
+
     public function tearDown()
     {
         m::close();
