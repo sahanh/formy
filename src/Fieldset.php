@@ -3,6 +3,7 @@ namespace SH\Formy;
 
 use SH\Formy\Input\Element;
 use OutOfRangeException;
+use OutOfBoundsException;
 use InvalidArgumentException;
 
 class Fieldset
@@ -28,7 +29,7 @@ class Fieldset
     public function getElement($name)
     {
         if (!isset($this->elements[$name]))
-            throw new OutOfRangeException("No element exists with the name [{$name}]");
+            throw new OutOfBoundsException("No element exists with the name [{$name}]");
 
         return $this->elements[$name];
     }

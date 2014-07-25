@@ -44,7 +44,7 @@ class FieldsetTest extends PHPUnit_Framework_Testcase
     }
 
     /**
-     * @expectedException OutOfRangeException
+     * @expectedException OutOfBoundsException
      * @expectedMessage No element exists with the name [first_name]
      */
     public function testInvalidElement()
