@@ -58,7 +58,11 @@ class Fieldset
     public function populateData($data)
     {
         foreach ($data as $field => $value) {
-            $this->getElement($field)->setValue($value);
+            try {
+                $this->getElement($field)->setValue($value);
+            } catch (OutOfBoundsException $e) {
+                
+            }
         }
 
         return $this;
