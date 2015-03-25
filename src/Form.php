@@ -85,7 +85,11 @@ class Form
 		return $this->getFieldset($fieldset)->getElement($element);
 	}
 
-	public function setFilter(Filterable $filter)
+	/**
+	 * TODO:
+	 * @param FilterableInterface $filter [description]
+	 */
+	public function setFilter(FilterableInterface $filter)
 	{
 
 	}
